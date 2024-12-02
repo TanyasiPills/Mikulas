@@ -31,8 +31,10 @@ model Jatek{
 
 model Gyerek{
     id Int @id @default(autoincrement())
+    nev String
     cim String
     joVolt Boolean
-    
-    Jatek Jatek[]
+
+    jatekid Int?
+    jatekok Jatek? @relation(fields: [jatekid], references: [id], onDelete: SetNull, onUpdate: Cascade)
 }

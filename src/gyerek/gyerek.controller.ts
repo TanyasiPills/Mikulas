@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
 import { GyerekService } from './gyerek.service';
 import { CreateGyerekDto } from './dto/create-gyerek.dto';
 import { UpdateGyerekDto } from './dto/update-gyerek.dto';
@@ -28,7 +28,9 @@ export class GyerekController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.gyerekService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const stuff = await this.gyerekService.remove(+id);
+    if(stuff == undefined) throw new NotFoundException();
+    return stuff;
   }
 }

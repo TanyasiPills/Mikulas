@@ -1,26 +1,41 @@
 import { Injectable } from '@nestjs/common';
 import { CreateJatekDto } from './dto/create-jatek.dto';
 import { UpdateJatekDto } from './dto/update-jatek.dto';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class JatekService {
+
+  db: PrismaService;
+
+  constructor(db: PrismaService) {
+    this.db = db;
+  }
+
   create(createJatekDto: CreateJatekDto) {
-    return 'This action adds a new jatek';
+    return this.db.jatek.create({data: createJatekDto});
   }
 
   findAll() {
-    return `This action returns all jatek`;
+    return this.db.jatek.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} jatek`;
+  async findOne(id: number) {
+    try{
+      return await this.db.jatek.findFirst({where: {id}});
+    } catch {return undefined;}
   }
 
-  update(id: number, updateJatekDto: UpdateJatekDto) {
-    return `This action updates a #${id} jatek`;
+  async update(id: number, UpdateJatekDto: UpdateJatekDto) {
+    try{
+      if(await this.db.jatek.findFirst({where:{id}}) == null) return undefined;
+      return await this.db.jatek.update({where: {id}, data: UpdateJatekDto});
+    } catch {return undefined;}
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} jatek`;
+  async remove(id: number) {
+    try{
+      return await this.db.jatek.delete({where: {id}});
+    } catch {return undefined;}
   }
 }

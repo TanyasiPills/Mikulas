@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
 import { JatekService } from './jatek.service';
 import { CreateJatekDto } from './dto/create-jatek.dto';
 import { UpdateJatekDto } from './dto/update-jatek.dto';
@@ -18,17 +18,23 @@ export class JatekController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.jatekService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const stuff = await this.jatekService.findOne(+id);
+    if(stuff == undefined) throw new NotFoundException();
+    return stuff;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateJatekDto: UpdateJatekDto) {
-    return this.jatekService.update(+id, updateJatekDto);
+  async update(@Param('id') id: string, @Body() updateJatekDto: UpdateJatekDto) {
+    const stuff = await this.jatekService.update(+id, updateJatekDto);
+    if(stuff == undefined) throw new NotFoundException();
+    return stuff;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.jatekService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const stuff = await this.jatekService.remove(+id);
+    if(stuff == undefined) throw new NotFoundException();
+    return stuff;
   }
 }
