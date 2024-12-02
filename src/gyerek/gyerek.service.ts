@@ -3,6 +3,8 @@ import { CreateGyerekDto } from './dto/create-gyerek.dto';
 import { UpdateGyerekDto } from './dto/update-gyerek.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Gyerek } from './entities/gyerek.entity';
+import { log } from 'console';
+import { disconnect } from 'process';
 
 @Injectable()
 export class GyerekService {
@@ -18,19 +20,20 @@ export class GyerekService {
   }
   async addJatek(id: number, jatekid: number){
     try{
-      if((await this.db.gyerek.findFirst({where: {id}})).joVolt){
-      return await this.db.gyerek.update({where: {id}, data: {jatekok: {connect: {id: jatekid}}}, include: {jatekok: true}});
+      const heo = await this.db.gyerek.findFirst({where:{id}});
+      console.log(heo);
+      if(heo.joVolt) {
+        console.log("what?");
+        return await this.db.gyerek.update({where: {id, joVolt: true}, data: {jatekok: {connect: {id: jatekid}}}, include: {jatekok: true}}); 
       }
-      else throw new ConflictException();
-    }
-    catch {return undefined;}
+      else return 0;
+    } catch {return undefined;}
   }
 
-  async deleteJatek(id: number, jatekid: number){
-    try{
-      return await this.db.gyerek.update({where: {id}, data: {jatekok: {disconnect: {id: jatekid}}}, include: {jatekok: true}});
-    }
-    catch {return undefined;}
+  async deleteJatek(id: number, jatekidfrfr: number){
+    try{      
+        return await this.db.gyerek.update({where: {id}, data: {jatekok: {disconnect: {}}}, include: {jatekok: true}});
+    } catch {return undefined;}
   }
 
   findAll() {

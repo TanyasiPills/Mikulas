@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, Put, ConflictException } from '@nestjs/common';
 import { GyerekService } from './gyerek.service';
 import { CreateGyerekDto } from './dto/create-gyerek.dto';
 import { UpdateGyerekDto } from './dto/update-gyerek.dto';
@@ -15,6 +15,20 @@ export class GyerekController {
   @Get()
   findAll() {
     return this.gyerekService.findAll();
+  }
+
+  @Put(':id/jatek/:jatekid')
+  async addJatek(@Param('id') id : string, @Param('jatekid') jatekid : string){
+    const stuff = await this.gyerekService.addJatek(+id, +jatekid)
+    if(stuff == undefined) throw new NotFoundException();
+    if(stuff == 0) throw new ConflictException();
+    return stuff;
+  }
+  @Delete(':id/jatek/:jatekid')
+  async deleteJatek(@Param('id') id : string, @Param('jatekid') jatekid : string){
+    const stuff = await this.gyerekService.addJatek(+id, +jatekid)
+    if(stuff == undefined) throw new NotFoundException();
+    return stuff;
   }
 
   @Get(':id')

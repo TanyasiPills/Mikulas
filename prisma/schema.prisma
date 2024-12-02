@@ -24,7 +24,7 @@ model Jatek{
     id Int @id @default(autoincrement())
     name String
     anyag Material
-    suly Decimal @db.Decimal(4,2)
+    suly Decimal
 
     gyerekek Gyerek[]
 }
