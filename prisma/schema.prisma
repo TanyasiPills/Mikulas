@@ -13,27 +13,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Artist {
-  id Int @id @default(autoincrement())
-  name String
-  birthDate DateTime @db.Date
-  songs Song[]
+enum Material{
+  wood
+  metal
+  plastic
+  other
 }
 
-model Song {
-  id Int @id @default(autoincrement())
-  title String
-  duration Int
-  price Int
-  rating Float @default(3)
-  playlists Playlist[]
+model Jatek{
+    id Int @id @default(autoincrement())
+    name String
+    anyag Material
+    suly Decimal @db.Decimal(4,2)
 
-  artist Artist @relation(fields: [artistId], references: [id])
-  artistId Int
+    gyerekek Gyerek[]
 }
 
-model Playlist {
-  id Int @id @default(autoincrement())
-  name String
-  songs Song[]
+model Gyerek{
+    id Int @id @default(autoincrement())
+    cim String
+    joVolt Boolean
+    
+    Jatek Jatek[]
 }
