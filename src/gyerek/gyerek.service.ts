@@ -30,8 +30,10 @@ export class GyerekService {
     } catch {return undefined;}
   }
 
-  async deleteJatek(id: number, jatekidfrfr: number){
+  async deleteJatek(id: number){
     try{      
+      console.log(id);
+      console.log(await this.db.gyerek.update({where: {id}, data: {jatekok: {disconnect: {}}}, include: {jatekok: true}}));
         return await this.db.gyerek.update({where: {id}, data: {jatekok: {disconnect: {}}}, include: {jatekok: true}});
     } catch {return undefined;}
   }
@@ -40,11 +42,16 @@ export class GyerekService {
     return this.db.gyerek.findMany({include: {jatekok: true}});
   }
 
-  findOne(id: number) {
-    return this.db.gyerek.findFirst({where: {id}, include: {jatekok: true}});
+  async findOne(id: number) {
+    try{
+      return this.db.gyerek.findFirst({where: {id}, include: {jatekok: true}});
+    } catch {return undefined;}
   }
-  update(id: number, updateGyerekDto: UpdateGyerekDto) {
-    return this.db.gyerek.update({where: {id}, data: updateGyerekDto});
+  async update(id: number, updateGyerekDto: UpdateGyerekDto) {
+    try{
+      await this.db.gyerek.findUniqueOrThrow({where:{id}});
+      return this.db.gyerek.update({where: {id}, data: updateGyerekDto});
+    } catch {return undefined;}
   }
 
   async remove(id: number) {

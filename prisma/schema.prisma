@@ -35,6 +35,6 @@ model Gyerek{
     cim String
     joVolt Boolean
 
+    jatekok Jatek? @relation(references: [id], fields: [jatekid], onDelete: SetNull, onUpdate: Cascade)
     jatekid Int?
-    jatekok Jatek? @relation(fields: [jatekid], references: [id], onDelete: SetNull, onUpdate: Cascade)
 }

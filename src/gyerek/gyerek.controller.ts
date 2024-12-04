@@ -25,20 +25,24 @@ export class GyerekController {
     return stuff;
   }
   @Delete(':id/jatek/:jatekid')
-  async deleteJatek(@Param('id') id : string, @Param('jatekid') jatekid : string){
-    const stuff = await this.gyerekService.addJatek(+id, +jatekid)
+  async deleteJatek(@Param('id') id : string){
+    const stuff = await this.gyerekService.deleteJatek(+id);
     if(stuff == undefined) throw new NotFoundException();
     return stuff;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.gyerekService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const stuff = await this.gyerekService.findOne(+id);
+    if(stuff == undefined) throw new NotFoundException();
+    return stuff;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGyerekDto: UpdateGyerekDto) {
-    return this.gyerekService.update(+id, updateGyerekDto);
+  async update(@Param('id') id: string, @Body() updateGyerekDto: UpdateGyerekDto) {
+    const stuff = await this.gyerekService.update(+id, updateGyerekDto);
+    if(stuff == undefined) throw new NotFoundException();
+    return stuff;
   }
 
   @Delete(':id')

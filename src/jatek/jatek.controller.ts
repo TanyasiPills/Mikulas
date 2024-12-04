@@ -19,7 +19,7 @@ export class JatekController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const stuff = await this.jatekService.findOne(+id);
+    const stuff = await this.jatekService.findOne(+id);   
     if(stuff == undefined) throw new NotFoundException();
     return stuff;
   }
